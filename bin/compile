@@ -63,12 +63,8 @@ function resolve_version() {
   ### TEMP
   echo bootstrap_node: $bootstrap_node
   echo LP_DIR: $LP_DIR
-  ls $bootstrap_node
-  ls $bootstrap_node/bin
-  ls $LP_DIR
-  ls $LP_DIR/vendor
-  ls $LP_DIR/vendor/node-semver
-  ls $LP_DIR/vendor/node-semver/bin
+  ls -alR $bootstrap_node
+  ls -alR $LP_DIR
   ### TEMP
 
   if [ "$2" == "" ]; then
@@ -86,7 +82,7 @@ function package_engine_version() {
   ### TEMP
   echo BUILD_DIR: $BUILD_DIR
   echo arg1: $1
-  ls $BUILD_DIR
+  ls -alR $BUILD_DIR
   ### TEMP
 
   version=$(cat $BUILD_DIR/package.json | $bootstrap_node/bin/node $LP_DIR/vendor/json/json engines.$1 2>/dev/null)

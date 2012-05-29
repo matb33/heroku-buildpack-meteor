@@ -71,11 +71,6 @@ function resolve_version() {
 }
 
 function package_engine_version() {
-
-		  echo BUILD_DIR: $BUILD_DIR
-		  echo arg1: $1
-		  ls $BUILD_DIR
-
   version=$(cat $BUILD_DIR/package.json | $bootstrap_node/bin/node $LP_DIR/vendor/json/json engines.$1 2>/dev/null)
   if [ $? == 0 ]; then
     echo $version | sed -e 's/\([<>=]\) /\1/g'
@@ -104,14 +99,14 @@ function package_download() {
 }
 
 bootstrap_node=$(mktmpdir bootstrap_node)
-package_download "nodejs" "0.6.18" $bootstrap_node
+package_download "nodejs" "0.4.7" $bootstrap_node
 
 # make some associative arrays
 declare -A engine_versions
 declare -A engine_defaults
 declare -A engine_requests
 
-engine_defaults["node"]="0.6.18"
+engine_defaults["node"]="0.4.7"
 engine_defaults["npm"]="1.0.106"
 
 engine_versions["node"]=$(manifest_versions "nodejs")
@@ -173,6 +168,10 @@ echo "-----> Installing dependencies with npm"
 run_npm "install --production"
 run_npm "rebuild"
 echo "Dependencies installed" | indent
+
+############################################
+# install meteor
+############################################
 
 METEOR_HOME=$BUILD_DIR/.meteor/local
 PATH=$METEOR_HOME/usr/bin:$METEOR_HOME/usr/lib/meteor/bin:$PATH

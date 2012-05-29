@@ -5,6 +5,29 @@ CACHE_DIR=$2
 METEOR_HOME=$BUILD_DIR/.meteor/local
 PATH=$METEOR_HOME/usr/bin:$METEOR_HOME/usr/lib/meteor/bin:$PATH
 
+function mktmpdir() {
+  dir=$(mktemp -t node-$1-XXXX)
+  rm -rf $dir
+  mkdir -p $dir
+  echo $dir
+}
+
+# vendor directories
+VENDORED_NODE="$(mktmpdir node)"
+VENDORED_NPM="$(mktmpdir npm)"
+
+function run_npm() {
+  command="$1"
+
+  cd $BUILD_DIR
+  HOME="$BUILD_DIR" $VENDORED_NODE/bin/node $VENDORED_NPM/cli.js $command 2>&1
+
+  if [ "${PIPESTATUS[*]}" != "0 0" ]; then
+    echo " !     Failed to $command dependencies with npm"
+    exit 1
+  fi
+}
+
 fetch_meteor() {
   if [ -f "$METEOR_HOME/usr/bin/meteor" ] ; then
     # Skip if meteor is already fetched
@@ -38,3 +61,9 @@ build() {
 
 fetch_meteor
 build
+
+# install dependencies with npm
+echo "-----> Installing dependencies with npm"
+run_npm "install --production"
+run_npm "rebuild"
+echo "       Dependencies installed"

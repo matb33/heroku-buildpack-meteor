@@ -3,7 +3,7 @@
 ## Usage
 
 ```
-% heroku create --stack cedar --buildpack https://github.com/jordansissel/heroku-buildpack-meteor.git
+$ heroku create --stack cedar --buildpack https://github.com/matb33/heroku-buildpack-meteor.git
 ```
 
 ## Example
@@ -11,7 +11,7 @@
 Create a sample app with 'meteor'
 
 ```
-% meteor create --example wordplay
+$ meteor create --example wordplay
 wordplay: created.
 
 To run your new app:
@@ -22,23 +22,23 @@ To run your new app:
 Put it in git.
 
 ```
-% cd wordplay
-% git init
+$ cd wordplay
+$ git init
 Initialized empty Git repository in /tmp/a/wordplay/.git/
-% git add .
-% git commit -m "Sample wordplay app!"
+$ git add .
+$ git commit -m "Sample wordplay app!"
 ```
 
 Create your heroku app
 
 ```
-% heroku create --stack cedar --buildpack https://github.com/jordansissel/heroku-buildpack-meteor.git
+$ heroku create --stack cedar --buildpack https://github.com/matb33/heroku-buildpack-meteor.git
 ```
 
 Deploy it
 
 ```
-% git push heroku
+$ git push heroku
 ```
 
 Enjoy!

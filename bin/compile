@@ -1,4 +1,5 @@
-#!/bin/sh
+#!/usr/bin/env bash
+# bin/compile <build-dir> <cache-dir>
 
 # fail fast
 set -e
@@ -18,19 +19,19 @@ BUILD_DIR=$1
 CACHE_DIR=$2
 LP_DIR=`cd $(dirname $0); cd ..; pwd`
 
-error() {
+function error() {
   echo " !     $*"
   exit 1
 }
 
-mktmpdir() {
+function mktmpdir() {
   dir=$(mktemp -t node-$1-XXXX)
   rm -rf $dir
   mkdir -p $dir
   echo $dir
 }
 
-indent() {
+function indent() {
   c='s/^/       /'
   case $(uname) in
     Darwin) sed -l "$c";;
@@ -38,7 +39,7 @@ indent() {
   esac
 }
 
-run_npm() {
+function run_npm() {
   command="$1"
 
   cd $BUILD_DIR
@@ -50,11 +51,11 @@ run_npm() {
   fi
 }
 
-manifest_versions() {
+function manifest_versions() {
   curl "http://${S3_BUCKET}.s3.amazonaws.com/manifest.${1}" -s -o - | tr -s '\n' ' '
 }
 
-resolve_version() {
+function resolve_version() {
   available_versions="$1"
   requested_version="$2"
   default_version="$3"
@@ -69,14 +70,14 @@ resolve_version() {
   fi
 }
 
-package_engine_version() {
+function package_engine_version() {
   version=$(cat $BUILD_DIR/package.json | $bootstrap_node/bin/node $LP_DIR/vendor/json/json engines.$1 2>/dev/null)
   if [ $? == 0 ]; then
     echo $version | sed -e 's/\([<>=]\) /\1/g'
   fi
 }
 
-package_resolve_version() {
+function package_resolve_version() {
   engine="$1"
   resolved_version=$(resolve_version "${engine_versions[$engine]}" "${engine_requests[$engine]}" "${engine_defaults[$engine]}")
 
@@ -87,7 +88,7 @@ package_resolve_version() {
   fi
 }
 
-package_download() {
+function package_download() {
   engine="$1"
   version="$2"
   location="$3"
@@ -171,7 +172,7 @@ echo "Dependencies installed" | indent
 METEOR_HOME=$BUILD_DIR/.meteor/local
 PATH=$METEOR_HOME/usr/bin:$METEOR_HOME/usr/lib/meteor/bin:$PATH
 
-fetch_meteor() {
+function fetch_meteor() {
   if [ -f "$METEOR_HOME/usr/bin/meteor" ] ; then
     # Skip if meteor is already fetched
     return
@@ -188,7 +189,7 @@ fetch_meteor() {
   ar p "$CACHE_DIR/$PACKAGE" data.tar.gz | tar -C "$METEOR_HOME" -zxf -
 }
 
-build() {
+function build() {
   (
     cd $BUILD_DIR
     echo "Building meteor bundle"

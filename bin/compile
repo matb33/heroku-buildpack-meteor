@@ -71,6 +71,11 @@ function resolve_version() {
 }
 
 function package_engine_version() {
+
+		  echo BUILD_DIR: $BUILD_DIR
+		  echo arg1: $1
+		  ls $BUILD_DIR
+
   version=$(cat $BUILD_DIR/package.json | $bootstrap_node/bin/node $LP_DIR/vendor/json/json engines.$1 2>/dev/null)
   if [ $? == 0 ]; then
     echo $version | sed -e 's/\([<>=]\) /\1/g'
@@ -193,7 +198,7 @@ function build() {
   (
     cd $BUILD_DIR
     echo "Building meteor bundle"
-    meteor bundle $CACHE_DIR/bundle.tar.gz 
+    meteor bundle $CACHE_DIR/bundle.tar.gz
     mkdir -p $BUILD_DIR/.meteor/local/build
     tar -zxf $CACHE_DIR/bundle.tar.gz --strip-components 1 -C $BUILD_DIR/.meteor/local/build
     rm $CACHE_DIR/bundle.tar.gz

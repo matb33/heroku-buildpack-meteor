@@ -60,6 +60,17 @@ function resolve_version() {
   requested_version="$2"
   default_version="$3"
 
+  ### TEMP
+  echo bootstrap_node: $bootstrap_node
+  echo LP_DIR: $LP_DIR
+  ls $bootstrap_node
+  ls $bootstrap_node/bin
+  ls $LP_DIR
+  ls $LP_DIR/vendor
+  ls $LP_DIR/vendor/node-semver
+  ls $LP_DIR/vendor/node-semver/bin
+  ### TEMP
+
   if [ "$2" == "" ]; then
     echo $3
   else

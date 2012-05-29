@@ -71,6 +71,13 @@ function resolve_version() {
 }
 
 function package_engine_version() {
+
+  ### TEMP
+  echo BUILD_DIR: $BUILD_DIR
+  echo arg1: $1
+  ls $BUILD_DIR
+  ### TEMP
+
   version=$(cat $BUILD_DIR/package.json | $bootstrap_node/bin/node $LP_DIR/vendor/json/json engines.$1 2>/dev/null)
   if [ $? == 0 ]; then
     echo $version | sed -e 's/\([<>=]\) /\1/g'

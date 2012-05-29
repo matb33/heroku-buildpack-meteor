@@ -5,7 +5,7 @@ CACHE_DIR=$2
 METEOR_HOME=$BUILD_DIR/.meteor/local
 PATH=$METEOR_HOME/usr/bin:$METEOR_HOME/usr/lib/meteor/bin:$PATH
 
-function mktmpdir() {
+mktmpdir() {
   dir=$(mktemp -t node-$1-XXXX)
   rm -rf $dir
   mkdir -p $dir
@@ -16,7 +16,7 @@ function mktmpdir() {
 VENDORED_NODE="$(mktmpdir node)"
 VENDORED_NPM="$(mktmpdir npm)"
 
-function run_npm() {
+run_npm() {
   command="$1"
 
   cd $BUILD_DIR
@@ -46,7 +46,7 @@ fetch_meteor() {
 }
 
 build() {
-  ( 
+  (
     cd $BUILD_DIR
     echo "Building meteor bundle"
     meteor bundle $CACHE_DIR/bundle.tar.gz 
